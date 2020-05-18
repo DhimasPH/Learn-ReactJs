@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import Login from './components/Login';
+import AuthContextProvider from './context/AuthContext';
+import Profile from './components/Profile';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import ProtectedRoute from './components/ProtectedRoute'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends Component{
+  render (){
+    return (
+      <AuthContextProvider>
+        <BrowserRouter>
+          <div className="App">
+            <header className="App-header">
+            <h1>React Login Jwt</h1><br/>
+              <Route path='/' exact component={Login}></Route>
+              <ProtectedRoute path="/profile" component={Profile}></ProtectedRoute>
+            </header>
+          </div>
+        </BrowserRouter>
+      </AuthContextProvider>
+    );
+  }
 }
 
 export default App;
