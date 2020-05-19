@@ -1,0 +1,22 @@
+import React, {Component} from 'react';
+import { withAuth } from '../context/AuthContext';
+import ButtonStatus from './ButtonStatus'
+
+class Profile extends Component{
+
+    componentDidMount(){
+        this.props.initUser()
+    }
+
+    render () {
+        return (
+            <div>
+                <h2>Halaman profile : {this.props.user.email}</h2>
+                <hr/>
+                <ButtonStatus />
+            </div>
+        )
+    }
+}
+
+export default withAuth(Profile)

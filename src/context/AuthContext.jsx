@@ -5,14 +5,23 @@ const axoisReq = axios.create();
 const AuthContext = React.createContext();
 
 
+// Konfigurasi axios
+
+axoisReq.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token')
+
+    config.headers.Authorization = token
+    return config
+})
+
 class AuthContextProvider extends Component{
     constructor(){
         super()
         this.state = {
             users : [],
-            user : localStorage.getItem('user') || "",
+            user : "",
             token : localStorage.getItem('token') || "",
-            isLoggedIn : (localStorage.getItem('user') == null) ? false : true
+            isLoggedIn : (localStorage.getItem('token') == null) ? false : true
         }
     }
 
@@ -20,19 +29,33 @@ class AuthContextProvider extends Component{
     login = (credentials) => {
         return axoisReq.post("http://localhost:4000/api/login",credentials)
         .then (response => {
-            const { token } = response.data
-            const user = credentials.email
-            localStorage.setItem("token",token)
-            localStorage.setItem("user",user)
 
-            this.setState({
-                user,
-                token,
-                isLoggedIn : true
-            })
+            if(response.data.success){
+                const { token } = response.data
+                const user = credentials.email
+                localStorage.setItem("token",token)
 
+                this.setState({
+                    token,
+                    isLoggedIn : true
+                })
+            }else{
+                this.setState({
+                    isLoggedIn : false
+                })
+            }
+            
             return console.log(response)
             // window.location.href = "/profile";
+        })
+    }
+
+    //init profil
+    initUser = () => {
+        return axoisReq.get("http://localhost:4000/api/profile")
+        .then (response => {
+            this.setState({ user : response.data });
+            return response
         })
     }
 
@@ -52,6 +75,7 @@ class AuthContextProvider extends Component{
             <AuthContext.Provider value ={{
                 login : this.login,
                 logout : this.logout,
+                initUser : this.initUser,
                 ...this.state
             }}>
                 {this.props.children}
