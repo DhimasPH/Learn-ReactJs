@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import './App.css';
 import Login from './components/Login';
 import AuthContextProvider from './context/AuthContext';
 import Profile from './components/Profile';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import ProtectedRoute from './components/ProtectedRoute'
+import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from 'react-bootstrap/Navbar';
+import Container from 'react-bootstrap/Container';
 
 
 class App extends Component{
@@ -12,13 +13,18 @@ class App extends Component{
     return (
       <AuthContextProvider>
         <BrowserRouter>
-          <div className="App">
-            <header className="App-header">
-            <h1>React Login Jwt</h1><br/>
+            <header>
+              <Navbar bg="dark" variant="dark">
+                <Navbar.Brand path="/">Aplikasi Sederhana React Js</Navbar.Brand>
+              </Navbar>
+            </header>
+            <Container className="p-3">
               <Route path='/' exact component={Login}></Route>
               <ProtectedRoute path="/profile" component={Profile}></ProtectedRoute>
-            </header>
-          </div>
+            </Container>
+            <footer className="footer-copyright text-center py-3 myfooter">
+              &copy; copyright Dhimas Herlambang {new Date().getFullYear()}
+            </footer>
         </BrowserRouter>
       </AuthContextProvider>
     );

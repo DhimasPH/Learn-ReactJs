@@ -21,7 +21,9 @@ class AuthContextProvider extends Component{
             users : [],
             user : "",
             token : localStorage.getItem('token') || "",
-            isLoggedIn : (localStorage.getItem('token') == null) ? false : true
+            isLoggedIn : (localStorage.getItem('token') == null) ? false : true,
+            alert : '',
+            message : ''
         }
     }
 
@@ -37,11 +39,15 @@ class AuthContextProvider extends Component{
 
                 this.setState({
                     token,
-                    isLoggedIn : true
+                    isLoggedIn : true,
+                    alert : 'success',
+                    message : ''
                 })
             }else{
                 this.setState({
-                    isLoggedIn : false
+                    isLoggedIn : false,
+                    alert : 'danger',
+                    message : response.data.message
                 })
             }
             
